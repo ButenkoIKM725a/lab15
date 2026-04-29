@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Vvedit cile chislo n: ";
+    cin >> n;
+    if (n < 0) n = abs(n);
+    vector<int> primeFactors;
+    int temp = n;
+    for (int i = 2; i * i <= temp; i++) {
+        while (temp % i == 0) {
+            bool exists = false;
+            for (int val : primeFactors) {
+                if (val == i) exists = true;
+            }
+            if (!exists) {
+                primeFactors.push_back(i);
+            }
+            temp /= i;
+        }
+    }
+    if (temp > 1) {
+        bool exists = false;
+        for (int val : primeFactors) {
+            if (val == temp) exists = true;
+        }
+        if (!exists) primeFactors.push_back(temp);
+    }
+    cout << "Masiv prostih dilnikiv: ";
+    for (int x : primeFactors) cout << x << " ";
+    cout << endl;
+    int size = primeFactors.size();
+    for (int i = 1; i < size; i++) {
+        int key = primeFactors[i];
+        int j = i - 1;
+        while (j >= 0 && primeFactors[j] < key) {
+            primeFactors[j + 1] = primeFactors[j];
+            j = j - 1;
+        }
+        primeFactors[j + 1] = key;
+    }
+    cout << "Vidsortovaniy za ubuvannyam: ";
+    for (int x : primeFactors) cout << x << " ";
+    cout << endl;
+
+    return 0;
+}
