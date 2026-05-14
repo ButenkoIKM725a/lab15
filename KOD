@@ -1,51 +1,55 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
-
+void insertionSort(int arr[], int size) {
+    for (int i = 1; i < size; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] < key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
 int main() {
     int n;
     cout << "Vvedit cile chislo n: ";
-    cin >> n;
+    if (!(cin >> n)) return 1;
     if (n < 0) n = abs(n);
-    vector<int> primeFactors;
-    int temp = n;
-    for (int i = 2; i * i <= temp; i++) {
-        while (temp % i == 0) {
-            bool exists = false;
-            for (int val : primeFactors) {
-                if (val == i) exists = true;
+    if (n == 0 || n == 1) {
+        cout << "Chislo ne mae prostih dilnikiv." << endl;
+        return 0;
+    }
+    int tempFactors[32];
+    int count = 0;
+    int tempN = n;
+    for (int i = 2; i * i <= tempN; i++) {
+        if (tempN % i == 0) {
+            tempFactors[count++] = i;
+            while (tempN % i == 0) {
+                tempN /= i;
             }
-            if (!exists) {
-                primeFactors.push_back(i);
-            }
-            temp /= i;
         }
     }
-    if (temp > 1) {
-        bool exists = false;
-        for (int val : primeFactors) {
-            if (val == temp) exists = true;
-        }
-        if (!exists) primeFactors.push_back(temp);
+    if (tempN > 1) {
+        tempFactors[count++] = tempN;
+    }
+    int* primeFactors = new int[count];
+    for (int i = 0; i < count; i++) {
+        primeFactors[i] = tempFactors[i];
     }
     cout << "Masiv prostih dilnikiv: ";
-    for (int x : primeFactors) cout << x << " ";
-    cout << endl;
-    int size = primeFactors.size();
-    for (int i = 1; i < size; i++) {
-        int key = primeFactors[i];
-        int j = i - 1;
-        while (j >= 0 && primeFactors[j] < key) {
-            primeFactors[j + 1] = primeFactors[j];
-            j = j - 1;
-        }
-        primeFactors[j + 1] = key;
+    for (int i = 0; i < count; i++) {
+        cout << primeFactors[i] << " ";
     }
-    cout << "Vidsortovaniy za ubuvannyam: ";
-    for (int x : primeFactors) cout << x << " ";
     cout << endl;
-
+    insertionSort(primeFactors, count);
+    cout << "Vidsortovaniy za ubuvannyam: ";
+    for (int i = 0; i < count; i++) {
+        cout << primeFactors[i] << " ";
+    }
+    cout << endl;
+    delete[] primeFactors;
     return 0;
 }
